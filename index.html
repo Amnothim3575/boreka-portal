@@ -3,33 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boreka Group | Cinematic Funding</title>
+    
+    <title>Boreka Group | Tree Funding & Environmental Impact Portal</title>
+    <meta name="description" content="Official Boreka Group portal. Join us in reforestation efforts, track your CO2 impact, and fund tree planting globally.">
+    <meta name="keywords" content="Boreka Group, Tree Funding, Tree Planting Kenya, Environmental Impact, Mpesa Tree Donation">
+    <meta name="author" content="Boreka Group">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { background: #022c22; min-height: 100vh; color: white; font-family: sans-serif; overflow-x: hidden; }
+        body { background: #022c22; min-height: 100vh; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .step-hidden { display: none !important; }
         .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; }
         .option-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); transition: 0.3s; border-radius: 20px; cursor: pointer; padding: 20px; text-align: center; }
         .option-card:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-5px); border-color: #34d399; }
         .card-selected { background: #10b981 !important; border-color: white !important; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
 
-        /* Cinematic Animations */
+        /* Success Animation */
         @keyframes tree-rise { 0% { transform: translateY(100px) scale(0); opacity: 0; } 40% { transform: translateY(-20px) scale(1.2); opacity: 1; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
         .animate-tree-cinematic { animation: tree-rise 4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
         @keyframes text-glow { 0% { opacity: 0; letter-spacing: 20px; filter: blur(10px); } 100% { opacity: 1; letter-spacing: 0px; filter: blur(0px); } }
-        .animate-text-cinematic { animation: text-glow 4s ease-out 3s forwards; opacity: 0; }
-        @keyframes stat-slide { 0% { transform: translateY(20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
-        .animate-stat-cinematic { animation: stat-slide 4s ease-out 7s forwards; opacity: 0; }
-        @keyframes button-fade { from { opacity: 0; } to { opacity: 1; } }
-        .animate-button-last { animation: button-fade 3s ease-in 11s forwards; opacity: 0; }
-
-        .co2-box { border-left: 4px solid #34d399; background: rgba(52, 211, 153, 0.1); padding: 15px 30px; margin-top: 20px; }
-        .percent-tag { background: #34d399; color: #022c22; font-weight: 900; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-top: 8px; display: inline-block; }
+        .animate-text-cinematic { animation: text-glow 4s ease-out 2s forwards; opacity: 0; }
         
-        input { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 12px; border-radius: 8px; color: white; outline: none; width: 100%; margin-top: 5px;}
-        input:focus { border-color: #34d399; background: rgba(255,255,255,0.15); }
-        label { font-size: 12px; text-transform: uppercase; color: #34d399; font-weight: bold; }
+        .percent-tag { background: #34d399; color: #022c22; font-weight: 900; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-top: 8px; display: inline-block; }
+        input { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 12px; border-radius: 8px; color: white; width: 100%; margin-top: 5px; }
+        label { font-size: 11px; text-transform: uppercase; color: #34d399; font-weight: bold; letter-spacing: 1px; }
     </style>
 </head>
 <body class="p-6">
@@ -41,7 +39,7 @@
 
     <main class="max-w-6xl mx-auto">
         <section id="st1">
-            <h2 class="text-center text-xs font-bold tracking-[0.4em] text-emerald-500/50 mb-8 uppercase">Select Your Contribution</h2>
+            <h2 class="text-center text-xs font-bold tracking-[0.4em] text-emerald-500/50 mb-8 uppercase">Choose Contribution Level</h2>
             <div id="grid" class="grid grid-cols-2 md:grid-cols-5 gap-4"></div>
         </section>
 
@@ -56,89 +54,71 @@
                     <div class="w-1/2 h-full flex flex-col items-center">
                         <canvas id="p1"></canvas>
                         <div id="perc1" class="percent-tag">0%</div>
-                        <p class="text-[10px] uppercase mt-1 tracking-tighter opacity-50">Volume Goal</p>
+                        <p class="text-[10px] uppercase mt-1 tracking-widest opacity-50">Volume Goal</p>
                     </div>
                     <div class="w-1/2 h-full flex flex-col items-center">
                         <canvas id="p2"></canvas>
                         <div id="perc2" class="percent-tag">0%</div>
-                        <p class="text-[10px] uppercase mt-1 tracking-tighter opacity-50">Species Cap</p>
+                        <p class="text-[10px] uppercase mt-1 tracking-widest opacity-50">Species Cap</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="st3" class="step-hidden mt-10 glass-panel p-10 max-w-2xl mx-auto">
-            <h2 class="text-2xl font-bold mb-8 text-center uppercase tracking-widest">Complete Your Impact</h2>
+            <h2 class="text-2xl font-bold mb-8 text-center uppercase tracking-widest">Secure Payment</h2>
             
             <div class="flex gap-2 mb-8 justify-center">
-                <button onclick="showPay('mpesa')" class="px-6 py-2 bg-emerald-800 rounded-full text-xs font-bold uppercase">M-Pesa</button>
-                <button onclick="showPay('visa')" class="px-6 py-2 bg-emerald-800 rounded-full text-xs font-bold uppercase">Visa Card</button>
-                <button onclick="showPay('paypal')" class="px-6 py-2 bg-emerald-800 rounded-full text-xs font-bold uppercase">PayPal</button>
+                <button onclick="showPay('mpesa')" class="px-6 py-2 bg-emerald-800 rounded-full text-xs font-bold uppercase hover:bg-emerald-600 transition">M-Pesa</button>
+                <button onclick="showPay('visa')" class="px-6 py-2 bg-emerald-800 rounded-full text-xs font-bold uppercase hover:bg-emerald-600 transition">Visa</button>
             </div>
 
             <div id="pay-mpesa" class="pay-form">
                 <div class="mb-4 text-left">
-                    <label>Phone Number (Safaricom)</label>
-                    <input type="text" placeholder="e.g. 07XXXXXXXX">
+                    <label>Safaricom Phone Number</label>
+                    <input type="text" placeholder="0712345678">
                 </div>
                 <div class="mb-6 text-left">
-                    <label>Amount (USD Equivalent)</label>
+                    <label>Total Amount</label>
                     <input id="mpesa-amt" type="text" readonly>
                 </div>
-                <button onclick="startCelebration()" class="w-full bg-green-500 py-4 rounded-xl font-bold">Initiate STK Push</button>
+                <button onclick="startCelebration()" class="w-full bg-[#24b33b] py-4 rounded-xl font-bold text-white shadow-lg">PAY VIA M-PESA</button>
             </div>
 
             <div id="pay-visa" class="pay-form hidden">
                 <div class="mb-4 text-left">
+                    <label>Cardholder Name</label>
+                    <input type="text" placeholder="Full Name">
+                </div>
+                <div class="mb-4 text-left">
                     <label>Card Number</label>
                     <input type="text" placeholder="XXXX XXXX XXXX XXXX">
                 </div>
-                <div class="grid grid-cols-2 gap-4 mb-6 text-left">
-                    <div>
-                        <label>Expiry Date</label>
-                        <input type="text" placeholder="MM/YY">
-                    </div>
-                    <div>
-                        <label>CVV (Number on Back)</label>
-                        <input type="password" placeholder="e.g. 123">
-                    </div>
-                </div>
-                <button onclick="startCelebration()" class="w-full bg-blue-600 py-4 rounded-xl font-bold">Process Payment</button>
-            </div>
-
-            <div id="pay-paypal" class="pay-form hidden text-center py-10">
-                <p class="mb-6 opacity-70 italic text-sm">You will be redirected to PayPal to complete your donation safely.</p>
-                <button onclick="startCelebration()" class="w-3/4 bg-yellow-500 text-blue-900 py-4 rounded-xl font-bold">Pay with PayPal</button>
+                <button onclick="startCelebration()" class="w-full bg-blue-600 py-4 rounded-xl font-bold text-white shadow-lg">CONFIRM VISA PAYMENT</button>
             </div>
         </section>
 
         <section id="st4" class="step-hidden fixed inset-0 z-50 bg-[#022c22] flex flex-col items-center justify-center p-10 text-center">
             <div class="animate-tree-cinematic text-[180px] mb-6">🌳</div>
             <h2 class="animate-text-cinematic text-6xl md:text-8xl font-black mb-4 uppercase">Success</h2>
-            <div class="animate-stat-cinematic">
-                <p class="text-emerald-400 text-lg italic mb-4">"Rooted in Progress, Planting for the Future"</p>
-                <div class="co2-box inline-block">
-                    <p class="text-emerald-300 text-xs uppercase tracking-widest mb-1">Environmental Impact</p>
-                    <p id="co2-val" class="text-3xl font-bold text-white"></p>
-                </div>
-            </div>
-            <button onclick="location.reload()" class="animate-button-last mt-12 bg-white text-emerald-900 px-12 py-4 rounded-full font-bold text-lg shadow-2xl">PLANT ANOTHER TREE</button>
+            <p class="text-emerald-400 text-lg italic mb-2">Project Contribution Verified</p>
+            <p id="co2-val" class="text-white font-bold text-xl mb-10"></p>
+            <button onclick="location.reload()" class="bg-white text-emerald-900 px-12 py-4 rounded-full font-bold text-lg hover:scale-105 transition">PLANT ANOTHER</button>
         </section>
     </main>
 
     <script>
         const treeData = [
-            {t: 1, p: 5, s: 1}, {t: 5, p: 25, s: 1}, {t: 15, p: 75, s: 1}, {t: 25, p: 125, s: 1}, 
-            {t: 50, p: 250, s: 2}, {t: 100, p: 500, s: 4}, {t: 250, p: 1250, s: 5}, {t: 500, p: 2500, s: 10}, 
-            {t: 1000, p: 5000, s: 15}, {t: 2500, p: 10000, s: 25}, {t: 5000, p: 20000, s: 50}, 
-            {t: 10000, p: 40000, s: 100}, {t: 25000, p: 100000, s: 250}, {t: 50000, p: 200000, s: 500}, 
-            {t: 75000, p: 300000, s: 750}, {t: 100000, p: 400000, s: 1000}, {t: 250000, p: 750000, s: 2500}, 
-            {t: 500000, p: 1500000, s: 5000}, {t: 750000, p: 2250000, s: 7500}, {t: 1000000, p: 3000000, s: 10000}
+            {t: 100, p: 500, s: 4}, {t: 250, p: 1250, s: 5}, {t: 500, p: 2500, s: 10}, 
+            {t: 1000, p: 5000, s: 15}, {t: 5000, p: 20000, s: 50}, {t: 10000, p: 40000, s: 100},
+            {t: 50000, p: 200000, s: 500}, {t: 100000, p: 400000, s: 1000}, {t: 500000, p: 1500000, s: 5000},
+            {t: 1000000, p: 3000000, s: 10000}
         ];
 
         let chosen = 0;
         let price = 0;
         const grid = document.getElementById('grid');
+        
         treeData.forEach((d) => {
             const card = document.createElement('div');
             card.className = 'option-card';
@@ -165,16 +145,13 @@
             const ctx1 = document.getElementById('p1').getContext('2d');
             const ctx2 = document.getElementById('p2').getContext('2d');
             
-            const chartVal1 = Math.max(d.t, 20000); 
-            const chartVal2 = Math.max(d.s, 200);
-
             const cfg = (v, m) => ({ 
                 type: 'doughnut', 
                 data: { datasets: [{ data: [v, m-v], backgroundColor: ['#34d399', 'rgba(255,255,255,0.05)'], borderWidth: 0 }] }, 
                 options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, animation: { duration: 2000 } } 
             });
-            c1 = new Chart(ctx1, cfg(chartVal1, 1000000));
-            c2 = new Chart(ctx2, cfg(chartVal2, 10000));
+            c1 = new Chart(ctx1, cfg(d.t, 1000000));
+            c2 = new Chart(ctx2, cfg(d.s, 10000));
             document.getElementById('st2').scrollIntoView({behavior:'smooth'});
         }
 
@@ -190,7 +167,7 @@
         }
         
         function startCelebration() {
-            document.getElementById('co2-val').innerText = `Removing ${(chosen * 22).toLocaleString()}kg of CO2 Yearly`;
+            document.getElementById('co2-val').innerText = `Removing ${(chosen * 22).toLocaleString()}kg of CO2 per year`;
             document.getElementById('st4').classList.remove('step-hidden');
             window.scrollTo(0,0);
         }
