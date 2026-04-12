@@ -3,53 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boreka Group | Tree Funding Portal</title>
+    <title>Boreka Group | Tree Funding & Environmental Impact Portal</title>
+    <meta name="description" content="Official Boreka Group portal. Join us in reforestation efforts, track your CO2 impact, and fund tree planting globally.">
+    <meta name="keywords" content="Boreka Group, Tree Funding, Tree Planting Kenya, Environmental Impact, Mpesa Tree Donation">
+    <meta name="author" content="Boreka Group">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
     <style>
-        body { background: #022c22; min-height: 100vh; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        :root { --emerald-glow: rgba(16, 185, 129, 0.4); }
+        body { 
+            background: radial-gradient(circle at top center, #064e3b 0%, #022c22 100%);
+            min-height: 100vh; 
+            color: white; 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden;
+        }
+        
+        .glass-panel { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .option-card { 
+            background: rgba(255, 255, 255, 0.02); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 20px; 
+            padding: 24px; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            cursor: pointer;
+        }
+
+        .option-card:hover { 
+            background: rgba(16, 185, 129, 0.1); 
+            border-color: #10b981; 
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 10px 30px -5px var(--emerald-glow);
+        }
+
+        .card-selected { 
+            background: #10b981 !important; 
+            color: #022c22 !important; 
+            border-color: #10b981 !important;
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+        }
+
         .step-hidden { display: none !important; }
-        .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; }
-        .option-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 20px; transition: all 0.3s; cursor: pointer; text-align: center; }
-        .option-card:hover { background: rgba(16, 185, 129, 0.1); border-color: #10b981; transform: translateY(-5px); }
-        .card-selected { background: #10b981 !important; color: black !important; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .animate-success { animation: pulse-glow 2s infinite; }
     </style>
 </head>
 <body class="flex flex-col">
-    <header class="p-6 flex justify-between items-center relative z-10">
-        <h1 class="text-2xl font-black tracking-tighter uppercase italic">Boreka <span class="text-emerald-500 underline">Group</span></h1>
+
+    <header class="p-8 flex justify-between items-center relative z-10 w-full max-w-7xl mx-auto">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center shadow-lg rotate-3">
+                <span class="text-2xl">🌲</span>
+            </div>
+            <h1 class="text-3xl font-black tracking-tighter uppercase italic">
+                Boreka <span class="text-emerald-500 underline decoration-2 underline-offset-4">Group</span>
+            </h1>
+        </div>
     </header>
 
     <main class="flex-grow flex flex-col items-center justify-center p-6 relative z-10">
-        <section id="st1" class="w-full max-w-6xl">
-            <h2 class="text-center text-emerald-400 font-bold tracking-widest uppercase mb-8 text-sm">Choose Contribution Level</h2>
-            <div id="grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-10"></div>
+        
+        <section id="st1" class="w-full max-w-6xl animate-in fade-in duration-700">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-emerald-400 font-bold tracking-[0.2em] uppercase text-xs mb-2">Contribution Portal</h2>
+                    <h3 class="text-4xl font-black tracking-tight">Select Impact Level</h3>
+                </div>
+                <p class="text-gray-400 text-sm hidden md:block">20 Tiers Available • Verified Reforestation</p>
+            </div>
 
-            <div class="glass-panel p-8">
-                <div class="grid md:grid-cols-2 gap-8 items-center">
+            <div id="grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-12">
+                </div>
+
+            <div class="glass-panel p-8 md:p-12 transition-all duration-500">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
                     <div>
-                        <h2 class="text-3xl font-black italic mb-2">Impact Analysis</h2>
-                        <p id="stats-label" class="text-emerald-400 font-bold text-xl mb-6">Select a level</p>
-                        <button onclick="showStep(2)" class="w-full bg-emerald-500 text-black font-black py-4 rounded-xl uppercase tracking-widest transition-transform hover:scale-105">Proceed to Checkout</button>
+                        <div class="inline-block px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-4">
+                            <span class="text-emerald-400 text-xs font-bold uppercase tracking-widest">Live Analysis</span>
+                        </div>
+                        <h2 class="text-4xl font-black italic mb-2 tracking-tighter">Impact Statistics</h2>
+                        <p id="stats-label" class="text-gray-400 font-medium text-xl mb-8">Click a contribution tier to calculate environmental return.</p>
+                        
+                        <button onclick="showStep(2)" id="proceed-btn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-black py-5 rounded-2xl uppercase tracking-[0.15em] transition-all transform hover:scale-[1.02] active:scale-95 shadow-xl disabled:opacity-30">
+                            Proceed to Verification
+                        </button>
                     </div>
-                    <div class="flex justify-around items-center">
-                        <div class="w-24 h-24 text-center"><canvas id="goalChart"></canvas><span class="text-[10px] uppercase font-bold">Goal</span></div>
-                        <div class="w-24 h-24 text-center"><canvas id="capChart"></canvas><span class="text-[10px] uppercase font-bold">Cap</span></div>
+
+                    <div class="flex justify-around items-center bg-black/20 rounded-3xl p-8 border border-white/5">
+                        <div class="text-center group">
+                            <div class="w-28 h-28 mb-3 relative">
+                                <canvas id="goalChart"></canvas>
+                                <div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-emerald-500 uppercase">Volume</div>
+                            </div>
+                            <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Annual Goal</span>
+                        </div>
+                        <div class="text-center group">
+                            <div class="w-28 h-28 mb-3 relative">
+                                <canvas id="capChart"></canvas>
+                                <div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-emerald-500 uppercase">Diversity</div>
+                            </div>
+                            <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Species Cap</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="st2" class="step-hidden fixed inset-0 bg-[#022c22] flex flex-col items-center justify-center p-6 text-center z-50">
-            <div class="text-[180px] mb-6">🌲</div>
-            <h2 class="text-6xl font-black mb-4">SUCCESS</h2>
-            <p class="text-emerald-400 text-lg italic mb-2">Project Contribution Verified</p>
-            <p id="co2-val" class="text-white font-bold text-xl mb-10"></p>
-            <button onclick="location.reload()" class="bg-white text-emerald-900 px-12 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform">PLANT ANOTHER</button>
+        <section id="st2" class="step-hidden fixed inset-0 bg-[#022c22] flex flex-col items-center justify-center p-6 text-center z-50 animate-in zoom-in duration-500">
+            <div class="text-[180px] mb-8 drop-shadow-[0_0_50px_rgba(16,185,129,0.3)]">🌲</div>
+            <h2 class="text-7xl md:text-8xl font-black mb-4 tracking-tighter">SUCCESS</h2>
+            <div class="h-1 w-24 bg-emerald-500 mb-6"></div>
+            <p class="text-emerald-400 text-2xl font-bold italic mb-2">Project Contribution Verified</p>
+            <p id="co2-val" class="text-white font-medium text-xl mb-12 max-w-md opacity-80"></p>
+            
+            <button onclick="location.reload()" class="bg-white text-emerald-900 px-16 py-5 rounded-full font-black text-xl hover:scale-105 transition-all shadow-2xl uppercase tracking-tighter">
+                Plant Another Forest
+            </button>
         </section>
+
     </main>
 
     <script>
+        // DATASET: 20 Tiers
         const treeData = [
             {t: 1, p: 5, s: 1}, {t: 5, p: 25, s: 1}, {t: 15, p: 75, s: 1}, {t: 25, p: 125, s: 1}, 
             {t: 50, p: 250, s: 2}, {t: 100, p: 500, s: 4}, {t: 250, p: 1250, s: 5}, {t: 500, p: 2500, s: 10}, 
@@ -62,10 +154,15 @@
         let chosen = 0, species = 0;
         const grid = document.getElementById('grid');
 
+        // Render 20 Cards
         treeData.forEach((d) => {
             const card = document.createElement('div');
-            card.className = 'option-card';
-            card.innerHTML = `<div class="text-2xl mb-1">🌲</div><div class="text-lg font-bold">${d.t.toLocaleString()}</div><div class="text-emerald-400 font-bold">$${d.p.toLocaleString()}</div>`;
+            card.className = 'option-card group flex flex-col items-center justify-center gap-2';
+            card.innerHTML = `
+                <div class="text-3xl opacity-40 group-hover:opacity-100 transition-opacity">🌲</div>
+                <div class="text-2xl font-black leading-none">${d.t.toLocaleString()}</div>
+                <div class="text-emerald-500 font-bold text-sm tracking-widest">$${d.p.toLocaleString()}</div>
+            `;
             card.onclick = () => {
                 document.querySelectorAll('.option-card').forEach(c => c.classList.remove('card-selected'));
                 card.classList.add('card-selected');
@@ -75,24 +172,35 @@
             grid.appendChild(card);
         });
 
+        // Charts Logic
         const ctx1 = document.getElementById('goalChart').getContext('2d');
         const ctx2 = document.getElementById('capChart').getContext('2d');
-        const cfg = (v, m) => ({ type: 'doughnut', data: { datasets: [{ data: [v, m-v], backgroundColor: ['#10b981', '#111827'], borderWidth: 0 }] }, options: { cutout: '80%', plugins: { tooltip: { enabled: false } } } });
+        const cfg = (v, max) => ({
+            type: 'doughnut',
+            data: { datasets: [{ data: [v, max - v], backgroundColor: ['#10b981', 'rgba(255,255,255,0.05)'], borderWidth: 0, borderRadius: 10 }] },
+            options: { cutout: '85%', plugins: { tooltip: { enabled: false } }, animation: { duration: 2000, easing: 'easeOutQuart' } }
+        });
+
         let gChart = new Chart(ctx1, cfg(0, 1000000));
         let sChart = new Chart(ctx2, cfg(0, 10000));
 
         function updateStats() {
-            document.getElementById('stats-label').innerText = `${chosen.toLocaleString()} Trees | ${species.toLocaleString()} Species`;
+            document.getElementById('stats-label').innerHTML = `
+                <span class="text-white">${chosen.toLocaleString()} Trees</span> 
+                <span class="mx-2 text-gray-700">|</span> 
+                <span class="text-emerald-500">${species.toLocaleString()} Bio-Species</span>`;
+            
             gChart.data.datasets[0].data = [chosen, 1000000 - chosen];
             sChart.data.datasets[0].data = [species, 10000 - species];
-            gChart.update(); sChart.update();
+            gChart.update();
+            sChart.update();
         }
 
         function showStep(n) {
-            if (n === 2 && chosen === 0) return alert("Select a level!");
+            if (chosen === 0) return alert("Please select a contribution level first.");
             document.getElementById('st1').classList.add('step-hidden');
             document.getElementById('st2').classList.remove('step-hidden');
-            document.getElementById('co2-val').innerText = `Offsetting ${(chosen * 22).toLocaleString()}kg of CO2 yearly`;
+            document.getElementById('co2-val').innerText = `You are personally offsetting ${(chosen * 22).toLocaleString()}kg of CO2 every single year.`;
         }
     </script>
 </body>
