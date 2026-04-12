@@ -3,145 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boreka Group | Tree Funding & Environmental Impact Portal</title>
-    <meta name="description" content="Official Boreka Group portal. Join us in reforestation efforts, track your CO2 impact, and fund tree planting globally.">
-    <meta name="keywords" content="Boreka Group, Tree Funding, Tree Planting Kenya, Environmental Impact, Mpesa Tree Donation">
-    <meta name="author" content="Boreka Group">
-
+    <title>Boreka Group | Global Reforestation Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-
     <style>
-        :root { --emerald-glow: rgba(16, 185, 129, 0.4); }
-        body { 
-            background: radial-gradient(circle at top center, #064e3b 0%, #022c22 100%);
-            min-height: 100vh; 
-            color: white; 
-            font-family: 'Inter', sans-serif; 
-            overflow-x: hidden;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
-        .glass-panel { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            border-radius: 32px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .option-card { 
-            background: rgba(255, 255, 255, 0.02); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-radius: 20px; 
-            padding: 24px; 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            cursor: pointer;
-        }
-
-        .option-card:hover { 
-            background: rgba(16, 185, 129, 0.1); 
-            border-color: #10b981; 
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 10px 30px -5px var(--emerald-glow);
-        }
-
-        .card-selected { 
-            background: #10b981 !important; 
-            color: #022c22 !important; 
-            border-color: #10b981 !important;
-            transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
-        }
-
+        :root { --emerald: #10b981; --dark: #022c22; }
+        body { background: var(--dark); color: white; font-family: 'Inter', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
+        
+        /* Premium UI Elements */
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; }
+        .nav-blur { background: rgba(2, 44, 34, 0.8); backdrop-filter: saturate(180%) blur(20px); }
+        
+        /* Interactive Cards */
+        .option-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; position: relative; overflow: hidden; }
+        .option-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(45deg, transparent, rgba(16, 185, 129, 0.1), transparent); transform: translateX(-100%); transition: 0.6s; }
+        .option-card:hover::after { transform: translateX(100%); }
+        .option-card:hover { border-color: var(--emerald); transform: translateY(-8px); background: rgba(16, 185, 129, 0.05); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5); }
+        .selected { border-color: var(--emerald); background: var(--emerald) !important; color: black !important; box-shadow: 0 0 40px rgba(16, 185, 129, 0.4); transform: scale(1.05); }
+        
+        /* Animations */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        .float-anim { animation: float 6s ease-in-out infinite; }
         .step-hidden { display: none !important; }
-
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-            70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-
-        .animate-success { animation: pulse-glow 2s infinite; }
+        .shimmer { background: linear-gradient(90deg, #10b981 0%, #34d399 50%, #10b981 100%); background-size: 200% auto; animation: shine 3s linear infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        @keyframes shine { to { background-position: 200% center; } }
     </style>
 </head>
-<body class="flex flex-col">
+<body>
 
-    <header class="p-8 flex justify-between items-center relative z-10 w-full max-w-7xl mx-auto">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center shadow-lg rotate-3">
-                <span class="text-2xl">🌲</span>
+    <nav class="fixed top-0 w-full z-50 nav-blur border-b border-white/5 p-4 transition-all">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">🌲</div>
+                <span class="font-black italic tracking-tighter text-xl">BOREKA</span>
             </div>
-            <h1 class="text-3xl font-black tracking-tighter uppercase italic">
-                Boreka <span class="text-emerald-500 underline decoration-2 underline-offset-4">Group</span>
-            </h1>
+            <div class="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-gray-400">
+                <a href="#home" class="hover:text-emerald-400 transition">Home</a>
+                <a href="#leaderboard" class="hover:text-emerald-400 transition">Leaders</a>
+                <a href="#portal" class="hover:text-emerald-400 transition">The Portal</a>
+            </div>
+            <div class="bg-emerald-500/10 border border-emerald-500/20 px-4 py-1 rounded-full">
+                <span class="text-emerald-400 text-[10px] font-black uppercase">Live Impact: 8.4M Trees</span>
+            </div>
+        </div>
+    </nav>
+
+    <header id="home" class="min-h-screen flex flex-col items-center justify-center p-6 pt-24 text-center relative">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-emerald-900/20 via-transparent to-transparent -z-10"></div>
+        <div class="float-anim text-[120px] mb-6">🌱</div>
+        <h1 class="text-7xl md:text-9xl font-black tracking-tighter italic mb-4">
+            REFOREST <span class="shimmer">GLOBAL</span>
+        </h1>
+        <p class="text-gray-400 text-xl max-w-3xl mb-12 leading-relaxed mx-auto">
+            Boreka Group is scaling environmental restoration through direct action. Select a contribution tier to fund verified planting projects across the African highlands.
+        </p>
+        <div class="flex flex-col md:flex-row gap-6 justify-center">
+            <a href="#portal" class="bg-emerald-500 text-black px-12 py-5 rounded-2xl font-black text-xl hover:scale-110 transition shadow-[0_0_50px_rgba(16,185,129,0.5)] uppercase italic">Start Planting</a>
+            <a href="#leaderboard" class="glass px-12 py-5 rounded-2xl font-bold text-xl hover:bg-white/10 transition uppercase tracking-tighter">View Rankings</a>
         </div>
     </header>
 
-    <main class="flex-grow flex flex-col items-center justify-center p-6 relative z-10">
-        
-        <section id="st1" class="w-full max-w-6xl animate-in fade-in duration-700">
-            <div class="flex justify-between items-end mb-8">
+    <section id="leaderboard" class="py-32 px-6 max-w-5xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-emerald-500 font-black uppercase tracking-[0.3em] text-sm mb-4 text-center">Wall of Impact</h2>
+            <h3 class="text-5xl font-black italic">GLOBAL LEADERS</h3>
+        </div>
+        <div class="glass p-12 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[100px]"></div>
+            <div class="space-y-4">
+                <div class="grid grid-cols-3 p-4 font-black text-gray-500 uppercase text-[10px] tracking-widest border-b border-white/5">
+                    <span>Rank / Contributor</span><span class="text-center">Region</span><span class="text-right">Trees</span>
+                </div>
+                <div class="grid grid-cols-3 p-6 rounded-2xl hover:bg-white/5 transition items-center">
+                    <span class="font-bold text-lg italic">01. Ministry of Env.</span>
+                    <span class="text-center text-gray-400">Kenya</span>
+                    <span class="text-right font-black text-emerald-400 text-xl tracking-tighter">5,000,000</span>
+                </div>
+                <div class="grid grid-cols-3 p-6 rounded-2xl hover:bg-white/5 transition items-center">
+                    <span class="font-bold text-lg italic">02. Boreka Founders</span>
+                    <span class="text-center text-gray-400">East Africa</span>
+                    <span class="text-right font-black text-emerald-400 text-xl tracking-tighter">1,200,000</span>
+                </div>
+                <div class="grid grid-cols-3 p-6 rounded-2xl hover:bg-white/5 transition items-center border border-emerald-500/20 bg-emerald-500/5">
+                    <span class="font-bold text-lg italic">03. Tech-Restore Hub</span>
+                    <span class="text-center text-gray-400">Global</span>
+                    <span class="text-right font-black text-emerald-400 text-xl tracking-tighter">850,000</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portal" class="py-32 px-6 w-full max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+            <div class="max-w-xl">
+                <h2 class="text-6xl font-black italic mb-4 leading-none">THE PORTAL</h2>
+                <p class="text-gray-400">Select your contribution level. Each tier represents a verified batch of saplings ready for the next rainy season.</p>
+            </div>
+            <div class="w-full md:w-80">
+                <label class="block text-[10px] font-black text-emerald-500 uppercase mb-3 tracking-[0.2em]">Select Species Focus</label>
+                <select id="species-type" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-emerald-500 transition text-sm">
+                    <option value="Acacia">🌳 Acacia (High CO2 absorption)</option>
+                    <option value="Baobab">🌵 Baobab (Water conservation)</option>
+                    <option value="Cedar">🌲 Cedar (Highland restoration)</option>
+                    <option value="Bamboo">🎋 Bamboo (Rapid growth)</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-16">
+            </div>
+
+        <div class="glass p-12 md:p-16 border-emerald-500/10">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div>
-                    <h2 class="text-emerald-400 font-bold tracking-[0.2em] uppercase text-xs mb-2">Contribution Portal</h2>
-                    <h3 class="text-4xl font-black tracking-tight">Select Impact Level</h3>
+                    <h2 class="text-4xl font-black italic mb-2">IMPACT ANALYSIS</h2>
+                    <p id="stats-label" class="text-emerald-400 font-bold text-2xl mb-8 tracking-tight">Select a contribution tier</p>
+                    <ul class="space-y-4 mb-10 text-gray-400 text-sm">
+                        <li class="flex items-center gap-3">✅ Verified Satellite Monitoring</li>
+                        <li class="flex items-center gap-3">✅ Community Planting Programs</li>
+                        <li class="flex items-center gap-3">✅ Annual Carbon Credit Certificate</li>
+                    </ul>
+                    <button onclick="openPayment()" class="w-full bg-emerald-500 text-black font-black py-6 rounded-2xl uppercase tracking-[0.2em] hover:scale-[1.03] transition-all shadow-[0_20px_40px_-10px_rgba(16,185,129,0.3)]">
+                        Proceed to Checkout
+                    </button>
                 </div>
-                <p class="text-gray-400 text-sm hidden md:block">20 Tiers Available • Verified Reforestation</p>
-            </div>
-
-            <div id="grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-12">
-                </div>
-
-            <div class="glass-panel p-8 md:p-12 transition-all duration-500">
-                <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <div class="inline-block px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-4">
-                            <span class="text-emerald-400 text-xs font-bold uppercase tracking-widest">Live Analysis</span>
-                        </div>
-                        <h2 class="text-4xl font-black italic mb-2 tracking-tighter">Impact Statistics</h2>
-                        <p id="stats-label" class="text-gray-400 font-medium text-xl mb-8">Click a contribution tier to calculate environmental return.</p>
-                        
-                        <button onclick="showStep(2)" id="proceed-btn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-black py-5 rounded-2xl uppercase tracking-[0.15em] transition-all transform hover:scale-[1.02] active:scale-95 shadow-xl disabled:opacity-30">
-                            Proceed to Verification
-                        </button>
+                <div class="flex justify-around items-center bg-black/40 p-10 rounded-[40px] border border-white/5">
+                    <div class="text-center">
+                        <div class="w-32 h-32 mb-4"><canvas id="ch1"></canvas></div>
+                        <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Growth Volume</span>
                     </div>
-
-                    <div class="flex justify-around items-center bg-black/20 rounded-3xl p-8 border border-white/5">
-                        <div class="text-center group">
-                            <div class="w-28 h-28 mb-3 relative">
-                                <canvas id="goalChart"></canvas>
-                                <div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-emerald-500 uppercase">Volume</div>
-                            </div>
-                            <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Annual Goal</span>
-                        </div>
-                        <div class="text-center group">
-                            <div class="w-28 h-28 mb-3 relative">
-                                <canvas id="capChart"></canvas>
-                                <div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-emerald-500 uppercase">Diversity</div>
-                            </div>
-                            <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Species Cap</span>
-                        </div>
+                    <div class="text-center">
+                        <div class="w-32 h-32 mb-4"><canvas id="ch2"></canvas></div>
+                        <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Bio-Cap</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="st2" class="step-hidden fixed inset-0 bg-[#022c22] flex flex-col items-center justify-center p-6 text-center z-50 animate-in zoom-in duration-500">
-            <div class="text-[180px] mb-8 drop-shadow-[0_0_50px_rgba(16,185,129,0.3)]">🌲</div>
-            <h2 class="text-7xl md:text-8xl font-black mb-4 tracking-tighter">SUCCESS</h2>
-            <div class="h-1 w-24 bg-emerald-500 mb-6"></div>
-            <p class="text-emerald-400 text-2xl font-bold italic mb-2">Project Contribution Verified</p>
-            <p id="co2-val" class="text-white font-medium text-xl mb-12 max-w-md opacity-80"></p>
+    <div id="pay-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl">
+        <div class="glass max-w-md w-full p-12 text-center border-emerald-500/30">
+            <div id="modal-content">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/15/M-PESA_LOGO-01.svg" class="h-16 mx-auto mb-6" alt="Mpesa">
+                <h3 class="text-3xl font-black italic mb-2 uppercase">Checkout</h3>
+                <p id="pay-desc" class="text-gray-400 text-sm mb-10 px-4"></p>
+                
+                <div class="text-left mb-6">
+                    <label class="text-[10px] font-bold text-emerald-500 uppercase ml-2 mb-1 block">Phone Number</label>
+                    <input type="text" id="phone" placeholder="2547XXXXXXXX" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-center text-2xl tracking-widest focus:border-emerald-500 outline-none">
+                </div>
+                
+                <button id="pay-btn" onclick="startProcessing()" class="w-full bg-[#24AC47] text-white font-black py-5 rounded-2xl mb-4 text-xl tracking-tight transition hover:bg-[#1e8e3a]">PAY SECURELY</button>
+                <button onclick="closePayment()" class="text-gray-600 font-bold hover:text-white transition uppercase text-xs tracking-widest">Back to Portal</button>
+            </div>
             
-            <button onclick="location.reload()" class="bg-white text-emerald-900 px-16 py-5 rounded-full font-black text-xl hover:scale-105 transition-all shadow-2xl uppercase tracking-tighter">
-                Plant Another Forest
-            </button>
-        </section>
+            <div id="processing" class="hidden">
+                <div class="w-20 h-20 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mx-auto mb-6"></div>
+                <p class="font-black italic text-xl uppercase italic">Processing STK Push...</p>
+                <p class="text-gray-500 text-sm mt-2">Check your phone to enter M-Pesa PIN</p>
+            </div>
+        </div>
+    </div>
 
-    </main>
+    <div id="success" class="hidden fixed inset-0 z-[200] bg-[#022c22] flex flex-col items-center justify-center p-6 text-center">
+        <div class="text-[220px] mb-8 drop-shadow-[0_0_60px_rgba(16,185,129,0.4)] animate-bounce">🌲</div>
+        <h2 class="text-7xl md:text-9xl font-black italic tracking-tighter mb-4">SUCCESS!</h2>
+        <div class="h-1 w-32 bg-emerald-500 mb-8"></div>
+        <p id="final-msg" class="text-gray-400 text-2xl max-w-2xl mb-12 font-medium italic"></p>
+        <button onclick="location.reload()" class="bg-emerald-500 text-black px-16 py-6 rounded-full font-black text-2xl hover:scale-110 shadow-2xl transition uppercase italic">Plant Another Forest</button>
+    </div>
 
     <script>
-        // DATASET: 20 Tiers
+        // 20 Tiers Dataset
         const treeData = [
             {t: 1, p: 5, s: 1}, {t: 5, p: 25, s: 1}, {t: 15, p: 75, s: 1}, {t: 25, p: 125, s: 1}, 
             {t: 50, p: 250, s: 2}, {t: 100, p: 500, s: 4}, {t: 250, p: 1250, s: 5}, {t: 500, p: 2500, s: 10}, 
@@ -151,56 +186,60 @@
             {t: 500000, p: 1500000, s: 5000}, {t: 750000, p: 2250000, s: 7500}, {t: 1000000, p: 3000000, s: 10000}
         ];
 
-        let chosen = 0, species = 0;
+        let sel = null;
         const grid = document.getElementById('grid');
 
-        // Render 20 Cards
-        treeData.forEach((d) => {
+        // Render Cards
+        treeData.forEach(d => {
             const card = document.createElement('div');
-            card.className = 'option-card group flex flex-col items-center justify-center gap-2';
+            card.className = 'option-card p-6 flex flex-col items-center justify-center text-center';
             card.innerHTML = `
-                <div class="text-3xl opacity-40 group-hover:opacity-100 transition-opacity">🌲</div>
-                <div class="text-2xl font-black leading-none">${d.t.toLocaleString()}</div>
-                <div class="text-emerald-500 font-bold text-sm tracking-widest">$${d.p.toLocaleString()}</div>
+                <div class="text-3xl mb-2 opacity-50">🌲</div>
+                <div class="text-2xl font-black leading-none italic">${d.t.toLocaleString()}</div>
+                <div class="text-emerald-500 font-bold uppercase text-[10px] mt-1">$${d.p.toLocaleString()} USD</div>
             `;
             card.onclick = () => {
-                document.querySelectorAll('.option-card').forEach(c => c.classList.remove('card-selected'));
-                card.classList.add('card-selected');
-                chosen = d.t; species = d.s;
-                updateStats();
+                document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                sel = d;
+                document.getElementById('stats-label').innerText = `${d.t.toLocaleString()} ${document.getElementById('species-type').value} Batch`;
+                updateCharts(d.t, d.s);
             };
             grid.appendChild(card);
         });
 
-        // Charts Logic
-        const ctx1 = document.getElementById('goalChart').getContext('2d');
-        const ctx2 = document.getElementById('capChart').getContext('2d');
-        const cfg = (v, max) => ({
+        // Chart Config
+        const cfg = (v, m) => ({
             type: 'doughnut',
-            data: { datasets: [{ data: [v, max - v], backgroundColor: ['#10b981', 'rgba(255,255,255,0.05)'], borderWidth: 0, borderRadius: 10 }] },
-            options: { cutout: '85%', plugins: { tooltip: { enabled: false } }, animation: { duration: 2000, easing: 'easeOutQuart' } }
+            data: { datasets: [{ data: [v, m-v], backgroundColor: ['#10b981', 'rgba(255,255,255,0.03)'], borderWidth: 0 }] },
+            options: { cutout: '88%', plugins: { tooltip: { enabled: false } }, animation: { duration: 1500, easing: 'easeOutQuart' } }
         });
 
-        let gChart = new Chart(ctx1, cfg(0, 1000000));
-        let sChart = new Chart(ctx2, cfg(0, 10000));
+        let ch1 = new Chart(document.getElementById('ch1'), cfg(0, 1000000));
+        let ch2 = new Chart(document.getElementById('ch2'), cfg(0, 10000));
 
-        function updateStats() {
-            document.getElementById('stats-label').innerHTML = `
-                <span class="text-white">${chosen.toLocaleString()} Trees</span> 
-                <span class="mx-2 text-gray-700">|</span> 
-                <span class="text-emerald-500">${species.toLocaleString()} Bio-Species</span>`;
-            
-            gChart.data.datasets[0].data = [chosen, 1000000 - chosen];
-            sChart.data.datasets[0].data = [species, 10000 - species];
-            gChart.update();
-            sChart.update();
+        function updateCharts(t, s) {
+            ch1.data.datasets[0].data = [t, 1000000 - t];
+            ch2.data.datasets[0].data = [s, 10000 - s];
+            ch1.update(); ch2.update();
         }
 
-        function showStep(n) {
-            if (chosen === 0) return alert("Please select a contribution level first.");
-            document.getElementById('st1').classList.add('step-hidden');
-            document.getElementById('st2').classList.remove('step-hidden');
-            document.getElementById('co2-val').innerText = `You are personally offsetting ${(chosen * 22).toLocaleString()}kg of CO2 every single year.`;
+        function openPayment() {
+            if(!sel) return alert("Please select a contribution tier!");
+            document.getElementById('pay-desc').innerText = `Your contribution will fund ${sel.t.toLocaleString()} trees. Total amount: $${sel.p.toLocaleString()}.`;
+            document.getElementById('pay-modal').classList.remove('hidden');
+        }
+
+        function closePayment() { document.getElementById('pay-modal').classList.add('hidden'); }
+
+        function startProcessing() {
+            document.getElementById('modal-content').classList.add('hidden');
+            document.getElementById('processing').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('pay-modal').classList.add('hidden');
+                document.getElementById('success').classList.remove('hidden');
+                document.getElementById('final-msg').innerText = `You've officially offset ${(sel.t * 22).toLocaleString()}kg of CO2 per year. Your trees are being scheduled for planting!`;
+            }, 3000);
         }
     </script>
 </body>
