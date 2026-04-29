@@ -3,248 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boreka Group | Global Reforestation Hub</title>
-    <meta name="description" content="Official Boreka Group portal. Fund tree planting and track environmental impact.">
+    <title>Boreka Group | Reforest Global</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        :root { --emerald: #10b981; --dark: #011C15; }
-        
-        body { background: var(--dark); color: white; font-family: 'Inter', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
-        
-        /* Premium UI Effects */
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 32px; }
-        .shimmer { background: linear-gradient(90deg, #10b981, #34d399, #10b981); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite; }
+        body { 
+            background-color: #011C15; 
+            color: white; 
+            font-family: 'Inter', sans-serif; 
+            scroll-behavior: smooth; 
+            overflow-x: hidden;
+        }
+
+        /* --- CINEMATIC ANIMATIONS --- */
+        .shimmer {
+            background: linear-gradient(90deg, #10b981, #fff, #10b981);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
         @keyframes shine { to { background-position: 200% center; } }
 
-        /* Animation Suite */
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        
-        .option-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; position: relative; overflow: hidden; }
-        .option-card:hover { border-color: var(--emerald); transform: translateY(-10px); background: rgba(16, 185, 129, 0.05); }
-        .selected { border-color: var(--emerald); background: var(--emerald) !important; color: black !important; box-shadow: 0 0 50px rgba(16, 185, 129, 0.3); }
+        /* Tree Evolution Animation (30 Seconds) */
+        .tree-stage { 
+            font-size: 10rem; 
+            filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.4));
+            transition: all 2s ease-in-out;
+            opacity: 0;
+            position: absolute;
+        }
+        .active-stage { opacity: 1; transform: scale(1.1); }
 
-        /* Particle Seed Animation */
-        .seed { position: absolute; background: rgba(16, 185, 129, 0.3); border-radius: 50%; pointer-events: none; animation: float 15s infinite linear; }
-        @keyframes float { from { transform: translateY(100vh) rotate(0deg); } to { transform: translateY(-10vh) rotate(360deg); } }
+        /* UI Elements */
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; }
+        .map-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center; }
+        
+        .option-card { 
+            background: rgba(255,255,255,0.02); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .option-card:hover { border-color: #10b981; transform: translateY(-5px); background: rgba(16,185,129,0.05); }
+        .card-selected { border-color: #10b981; background: #10b981 !important; color: black !important; }
     </style>
 </head>
-<body>
+<body class="p-4 md:p-10">
 
-    <div id="particle-container" class="fixed inset-0 z-0"></div>
+    <div id="mapContainer" class="map-overlay p-10">
+        <div class="glass w-full h-full p-8 flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-4xl font-black italic">GLOBAL PLANTING SITES</h2>
+                <button onclick="toggleMap()" class="text-gray-400 hover:text-white">CLOSE [X]</button>
+            </div>
+            <div class="flex-grow bg-emerald-950/50 rounded-3xl overflow-hidden relative border border-white/10">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <p class="text-emerald-500 font-bold animate-pulse uppercase tracking-widest">Loading Satellite Telemetry...</p>
+                </div>
+                <iframe class="w-full h-full opacity-40 grayscale contrast-125" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.279584346765!2d36.8219!3d-1.2921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10d86f51d0d1%3A0xf64f51954d24a9e!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2ske!4v1625060000000!5m2!1sen!2ske" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
 
-    <nav class="fixed top-0 w-full z-50 bg-emerald-950/80 backdrop-blur-lg border-b border-white/5 p-5">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-xl">🌳</div>
-                <span class="font-black italic tracking-tighter text-2xl uppercase">BOREKA</span>
-            </div>
-            <div class="hidden lg:flex gap-12 text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">
-                <a href="#home" class="hover:text-emerald-400 transition">Evolution</a>
-                <a href="#science" class="hover:text-emerald-400 transition">Our Science</a>
-                <a href="#portal" class="hover:text-emerald-400 transition">The Portal</a>
-                <a href="#leaderboard" class="hover:text-emerald-400 transition">Impact Leaders</a>
-            </div>
-            <div class="bg-emerald-500/10 border border-emerald-500/20 px-5 py-2 rounded-full">
-                <span class="text-emerald-400 text-[10px] font-black uppercase tracking-widest">Global Impact: 8,421,902 Trees</span>
-            </div>
+    <nav class="flex justify-between items-center max-w-7xl mx-auto mb-20 relative z-10">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-emerald-500 rounded flex items-center justify-center">🌲</div>
+            <span class="font-black italic text-xl tracking-tighter">BOREKA</span>
+        </div>
+
+        <div class="hidden lg:flex gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">
+            <a href="#home" class="hover:text-emerald-400 transition">Home</a>
+            <a href="#portal" class="hover:text-emerald-400 transition">Planting</a>
+            <a href="#funding" class="hover:text-emerald-400 transition">Funding</a>
+            <a href="#leaders" class="hover:text-emerald-400 transition">Leaders</a>
+        </div>
+
+        <div onclick="toggleMap()" class="cursor-pointer bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full hover:bg-emerald-500/20 transition group">
+            <span class="text-emerald-400 text-[10px] font-black uppercase tracking-widest group-hover:text-white transition">LIVE IMPACT: 8.4M TREES</span>
         </div>
     </nav>
 
-    <header id="home" class="min-h-screen flex flex-col items-center justify-center p-8 text-center relative z-10">
-        <div class="reveal active">
-            <div class="w-32 h-32 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-10 border border-emerald-500/20">
-                <span class="text-6xl animate-pulse">🌱</span>
-            </div>
-            <h1 class="text-7xl md:text-9xl font-black italic tracking-tighter leading-none mb-6">
-                REFOREST <span class="shimmer">GLOBAL</span>
-            </h1>
-            <p class="text-gray-400 text-xl max-w-3xl mb-12 leading-relaxed mx-auto">
-                Modernizing the bridge between global climate funding and local agricultural restoration through verified carbon sequestration and high-fidelity data.
-            </p>
-            <div class="flex flex-col md:flex-row gap-6 justify-center">
-                <a href="#portal" class="bg-emerald-500 text-black px-14 py-6 rounded-2xl font-black text-xl hover:scale-110 transition shadow-[0_0_60px_rgba(16,185,129,0.4)] uppercase italic">Enter Portal</a>
-                <a href="#science" class="glass px-14 py-6 rounded-2xl font-bold text-xl hover:bg-white/10 transition uppercase tracking-tighter">View Science</a>
-            </div>
-        </div>
-    </header>
+    <section id="home" class="min-h-screen flex flex-col items-center justify-center text-center relative max-w-6xl mx-auto">
+        
+        <div class="relative h-64 w-64 mb-16 flex items-center justify-center">
+            <div id="stage1" class="tree-stage active-stage">🫘</div> <div id="stage2" class="tree-stage">🌱</div> <div id="stage3" class="tree-stage">🌿</div> <div id="stage4" class="tree-stage">🌳</div> </div>
 
-    <section id="science" class="py-40 px-8 max-w-7xl mx-auto relative z-10">
-        <div class="reveal grid lg:grid-cols-2 gap-20 items-center">
-            <div>
-                <h2 class="text-emerald-500 font-black uppercase tracking-[0.4em] text-xs mb-4">Verification Layer</h2>
-                <h3 class="text-6xl font-black italic mb-8 leading-tight">Global Soil. <br>Local Impact.</h3>
-                <p class="text-gray-400 text-lg mb-10 leading-loose">
-                    Our proprietary "Soil-Fidelity" algorithm maps 450+ farms across Kenya, measuring real-time carbon sequestration through satellite telemetry and community-led ground truth data.
-                </p>
-                <div class="grid grid-cols-2 gap-8">
-                    <div class="glass p-8">
-                        <p class="text-4xl font-black text-emerald-400 mb-1">99.8%</p>
-                        <p class="text-[10px] font-black uppercase tracking-widest text-gray-500">Sequestration Accuracy</p>
-                    </div>
-                    <div class="glass p-8">
-                        <p class="text-4xl font-black text-white mb-1">12.1k</p>
-                        <p class="text-[10px] font-black uppercase tracking-widest text-gray-500">Metric Tons Offset</p>
-                    </div>
-                </div>
+        <h1 class="text-7xl md:text-9xl font-black italic tracking-tighter leading-none mb-6">
+            REFOREST <span class="shimmer">GLOBAL</span>
+        </h1>
+        <p class="text-gray-400 text-xl max-w-2xl mb-12 leading-relaxed">
+            Boreka Group is scaling environmental restoration through direct action. Select a contribution tier to fund verified planting projects across the African highlands.
+        </p>
+        <div class="flex gap-6">
+            <a href="#portal" class="bg-emerald-500 text-black px-12 py-5 rounded-2xl font-black text-xl hover:scale-105 transition shadow-[0_0_50px_rgba(16,185,129,0.3)]">START PLANTING</a>
+            <a href="#science" class="bg-white/5 border border-white/10 text-white px-12 py-5 rounded-2xl font-semibold text-xl hover:bg-white/10 transition">OUR SCIENCE</a>
+        </div>
+    </section>
+
+    <section id="leaders" class="py-32 max-w-7xl mx-auto">
+        <h2 class="text-emerald-500 font-black uppercase tracking-widest text-sm text-center mb-16">The Governance Board</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="glass p-8 text-center">
+                <div class="w-24 h-24 bg-white/5 rounded-full mx-auto mb-4 border border-white/10"></div>
+                <p class="font-bold">John Paul M.</p>
+                <p class="text-[10px] text-emerald-500 uppercase font-black">Strategic Lead</p>
             </div>
-            <div class="glass p-12 border-emerald-500/20 relative">
-                <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/10 blur-3xl"></div>
-                <h4 class="text-xs font-black uppercase tracking-widest text-emerald-500 mb-8 text-center">Live Sequestration Delta (2023-2026)</h4>
-                <canvas id="scienceChart" class="w-full"></canvas>
+            <div class="glass p-8 text-center">
+                <div class="w-24 h-24 bg-white/5 rounded-full mx-auto mb-4 border border-white/10"></div>
+                <p class="font-bold">Sarah K.</p>
+                <p class="text-[10px] text-emerald-500 uppercase font-black">Environmental Lead</p>
+            </div>
+            <div class="glass p-8 text-center">
+                <div class="w-24 h-24 bg-white/5 rounded-full mx-auto mb-4 border border-white/10"></div>
+                <p class="font-bold">David O.</p>
+                <p class="text-[10px] text-emerald-500 uppercase font-black">Tech Infrastructure</p>
+            </div>
+            <div class="glass p-8 text-center">
+                <div class="w-24 h-24 bg-white/5 rounded-full mx-auto mb-4 border border-white/10"></div>
+                <p class="font-bold">Amara W.</p>
+                <p class="text-[10px] text-emerald-500 uppercase font-black">Community Liaison</p>
             </div>
         </div>
     </section>
 
-    <section id="portal" class="py-40 px-8 w-full max-w-7xl mx-auto relative z-10">
-        <div class="reveal flex flex-col lg:flex-row justify-between items-end mb-20 gap-12">
-            <div class="max-w-2xl">
-                <h2 class="text-7xl font-black italic mb-4">THE PORTAL</h2>
-                <p class="text-gray-400">Select your contribution tier and choose from 100 native species to be planted in your name.</p>
-            </div>
-            <div class="w-full lg:w-96">
-                <label class="block text-[10px] font-black text-emerald-500 uppercase mb-3 tracking-widest">Select Species Focus</label>
-                <select id="speciesSelect" class="w-full bg-white/5 border border-white/10 p-6 rounded-2xl outline-none focus:border-emerald-500 transition text-sm appearance-none">
-                    </select>
-            </div>
+    <section id="portal" class="py-32 max-w-7xl mx-auto">
+        <div class="mb-16">
+            <h2 class="text-5xl md:text-7xl font-black italic tracking-tighter mb-4">CHOOSE CONTRIBUTION</h2>
+            <p class="text-gray-400">Verified reforestation tiers. Each selection calculates live environmental impact.</p>
         </div>
 
-        <div id="grid" class="reveal grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5 mb-20">
+        <div id="grid" class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-16">
             </div>
 
-        <div class="reveal glass p-12 lg:p-20 border-emerald-500/10">
+        <div class="glass p-12 lg:p-20">
             <div class="grid lg:grid-cols-2 gap-20 items-center">
                 <div>
-                    <h2 class="text-5xl font-black italic mb-2">IMPACT ANALYSIS</h2>
-                    <p id="statsLabel" class="text-emerald-400 font-bold text-2xl mb-10">Ready for Selection</p>
-                    <ul class="space-y-5 mb-12 text-gray-400 font-medium">
-                        <li class="flex items-center gap-4 text-emerald-500"><span class="w-6 h-6 bg-emerald-500/20 rounded-full flex items-center justify-center text-[10px]">✓</span> Verified Satellite Monitoring</li>
-                        <li class="flex items-center gap-4"><span class="w-6 h-6 bg-white/5 rounded-full flex items-center justify-center text-[10px]">✓</span> Community Planting Programs</li>
-                        <li class="flex items-center gap-4"><span class="w-6 h-6 bg-white/5 rounded-full flex items-center justify-center text-[10px]">✓</span> Annual Carbon Credit Certificate</li>
-                    </ul>
-                    <button onclick="openPayment()" class="w-full bg-emerald-500 text-black font-black py-7 rounded-3xl uppercase tracking-widest hover:scale-[1.02] transition shadow-2xl text-xl italic">Proceed to Checkout</button>
+                    <h2 class="text-5xl font-black italic mb-2">Impact Analysis</h2>
+                    <p id="impact-label" class="text-emerald-400 font-bold text-2xl mb-12">Select a Tier to Begin</p>
+                    <button class="w-full bg-emerald-500 text-black font-black py-6 rounded-3xl text-xl hover:scale-105 transition shadow-2xl">PROCEED TO CHECKOUT</button>
                 </div>
-                <div class="flex justify-around items-center bg-black/40 p-12 rounded-[50px] border border-white/5 shadow-inner">
-                    <div class="text-center"><div class="w-40 h-40 mb-6"><canvas id="ch1"></canvas></div><span class="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">Growth Volume</span></div>
-                    <div class="text-center"><div class="w-40 h-40 mb-6"><canvas id="ch2"></canvas></div><span class="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">Diversity Cap</span></div>
+                <div class="flex justify-around items-center">
+                    <div class="text-center">
+                        <div class="w-32 h-32 mb-4"><canvas id="volumeChart"></canvas></div>
+                        <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Volume Goal</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-32 h-32 mb-4"><canvas id="speciesChart"></canvas></div>
+                        <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Species Cap</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div id="payModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-8 bg-black/95 backdrop-blur-3xl">
-        <div class="glass max-w-lg w-full p-16 text-center border-emerald-500/30">
-            <div id="modalMain">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/15/M-PESA_LOGO-01.svg" class="h-20 mx-auto mb-10">
-                <h3 class="text-4xl font-black italic mb-2 uppercase">Secure Push</h3>
-                <p id="payDesc" class="text-gray-400 mb-12"></p>
-                <input type="text" placeholder="2547XXXXXXXX" class="w-full bg-white/5 border border-white/10 p-6 rounded-3xl text-center text-3xl font-black mb-8 outline-none focus:border-emerald-500 tracking-widest">
-                <button onclick="startProcessing()" class="w-full bg-[#24AC47] text-white font-black py-6 rounded-3xl text-2xl shadow-xl hover:bg-[#1e8e3a] transition mb-6">COMPLETE TRANSACTION</button>
-                <button onclick="closePayment()" class="text-gray-600 font-black hover:text-white transition uppercase text-xs tracking-widest">Cancel Payment</button>
-            </div>
-            <div id="modalLoading" class="hidden">
-                <div class="w-24 h-24 border-8 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin mx-auto mb-8"></div>
-                <p class="font-black italic text-2xl uppercase italic">Awaiting PIN Entry...</p>
-                <p class="text-gray-500 mt-4">Check your mobile device for the STK prompt.</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="success" class="hidden fixed inset-0 z-[200] bg-[#011C15] flex flex-col items-center justify-center p-8 text-center">
-        <div class="text-[250px] mb-10 drop-shadow-[0_0_100px_rgba(16,185,129,0.5)] animate-bounce">🌲</div>
-        <h2 class="text-8xl md:text-[10rem] font-black italic tracking-tighter mb-6 leading-none">VERIFIED!</h2>
-        <p id="finalMsg" class="text-emerald-400 text-3xl max-w-4xl font-bold italic mb-16"></p>
-        <button onclick="location.reload()" class="bg-white text-emerald-950 px-20 py-8 rounded-full font-black text-3xl hover:scale-110 shadow-2xl transition uppercase italic tracking-tighter">Plant More Forests</button>
-    </div>
-
     <script>
-        // PARTICLE ENGINE
-        const container = document.getElementById('particle-container');
-        for(let i=0; i<30; i++) {
-            const seed = document.createElement('div');
-            seed.className = 'seed';
-            seed.style.width = seed.style.height = Math.random() * 8 + 'px';
-            seed.style.left = Math.random() * 100 + 'vw';
-            seed.style.animationDuration = Math.random() * 10 + 10 + 's';
-            seed.style.animationDelay = Math.random() * 5 + 's';
-            container.appendChild(seed);
+        // --- 1. GROWTH ANIMATION LOGIC (30s Cycle) ---
+        let stage = 1;
+        setInterval(() => {
+            document.querySelectorAll('.tree-stage').forEach(el => el.classList.remove('active-stage'));
+            stage = stage < 4 ? stage + 1 : 1;
+            document.getElementById(`stage${stage}`).classList.add('active-stage');
+        }, 7500); // Transitions every 7.5s (30s total)
+
+        // --- 2. MAP TOGGLE ---
+        function toggleMap() {
+            const map = document.getElementById('mapContainer');
+            map.style.display = map.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        // SCROLL REVEAL ENGINE
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('active'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // 100 SPECIES INJECTOR
-        const species = ["Acacia", "Baobab", "Bamboo", "Cedar", "Mango", "Ebony", "Mahogany", "Jacaranda", "Ficus", "Pine"];
-        const sSelect = document.getElementById('speciesSelect');
-        for(let i=1; i<=100; i++) {
-            const name = `${species[i % 10]} Type-${Math.ceil(i/10)}`;
-            const opt = document.createElement('option');
-            opt.value = name; opt.innerText = `🌳 ${name}`;
-            sSelect.appendChild(opt);
-        }
-
-        // SCIENCE CHART
-        new Chart(document.getElementById('scienceChart'), {
-            type: 'line',
-            data: {
-                labels: ['2023', '2024', '2025', '2026'],
-                datasets: [{
-                    data: [2.1, 4.8, 8.5, 12.1],
-                    borderColor: '#10b981',
-                    borderWidth: 4,
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 6,
-                    pointBackgroundColor: '#10b981'
-                }]
-            },
-            options: { plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#4b5563' } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#4b5563' } } } }
-        });
-
-        // 20 TIERS & PORTAL LOGIC
+        // --- 3. 20-TIER DATA INJECTION ---
         const treeData = [
             {t: 1, p: 5}, {t: 5, p: 25}, {t: 15, p: 75}, {t: 25, p: 125}, {t: 50, p: 250}, 
             {t: 100, p: 500}, {t: 250, p: 1250}, {t: 500, p: 2500}, {t: 1000, p: 5000}, {t: 2500, p: 10000}, 
             {t: 5000, p: 20000}, {t: 10000, p: 40000}, {t: 25000, p: 100000}, {t: 50000, p: 200000}, {t: 75000, p: 300000}, 
             {t: 100000, p: 400000}, {t: 250000, p: 750000}, {t: 500000, p: 1500000}, {t: 750000, p: 2250000}, {t: 1000000, p: 3000000}
         ];
-        
-        let sel = null;
+
+        const grid = document.getElementById('grid');
         treeData.forEach(d => {
-            const card = document.createElement('div');
-            card.className = 'option-card p-8 flex flex-col items-center justify-center text-center';
-            card.innerHTML = `<div class="text-4xl mb-3">🌲</div><div class="text-3xl font-black italic">${d.t.toLocaleString()}</div><div class="text-emerald-500 font-black tracking-widest text-[10px] mt-1">$${d.p.toLocaleString()} USD</div>`;
-            card.onclick = () => {
-                document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
-                sel = d;
-                document.getElementById('statsLabel').innerText = `${d.t.toLocaleString()} ${sSelect.value} Saplings`;
+            const el = document.createElement('div');
+            el.className = 'option-card p-8 rounded-3xl flex flex-col items-center justify-center cursor-pointer';
+            el.innerHTML = `<div class="text-2xl mb-1">🌲</div><div class="text-xl font-black italic">${d.t.toLocaleString()}</div><div class="text-emerald-500 font-bold">$${d.p.toLocaleString()}</div>`;
+            el.onclick = () => {
+                document.querySelectorAll('.option-card').forEach(c => c.classList.remove('card-selected'));
+                el.classList.add('card-selected');
+                document.getElementById('impact-label').innerText = `${d.t.toLocaleString()} Trees | Verified`;
                 updateCharts(d.t);
             };
-            document.getElementById('grid').appendChild(card);
+            grid.appendChild(el);
         });
 
-        const cfg = (v, m) => ({ type: 'doughnut', data: { datasets: [{ data: [v, m-v], backgroundColor: ['#10b981', 'rgba(255,255,255,0.03)'], borderWidth: 0 }] }, options: { cutout: '90%', plugins: { tooltip: { enabled: false } } } });
-        let ch1 = new Chart(document.getElementById('ch1'), cfg(0, 1000000));
-        let ch2 = new Chart(document.getElementById('ch2'), cfg(0, 10000));
-        function updateCharts(t) { ch1.data.datasets[0].data=[t, 1000000-t]; ch2.data.datasets[0].data=[5000, 5000]; ch1.update(); ch2.update(); }
-        
-        function openPayment() { if(!sel) return alert("Select impact level!"); document.getElementById('payDesc').innerText = `Funding ${sel.t.toLocaleString()} trees. Amount: $${sel.p.toLocaleString()}.`; document.getElementById('payModal').classList.remove('hidden'); }
-        function closePayment() { document.getElementById('payModal').classList.add('hidden'); }
-        function startProcessing() {
-            document.getElementById('modalMain').classList.add('hidden');
-            document.getElementById('modalLoading').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('payModal').classList.add('hidden');
-                document.getElementById('success').classList.remove('hidden');
-                document.getElementById('finalMsg').innerText = `You have officially secured ${sel.t.toLocaleString()} ${sSelect.value} trees for the African Highlands. Certificate arriving via email.`;
-            }, 4000);
+        // --- 4. IMPACT CHARTS (Chart.js) ---
+        const cfg = (v, m) => ({ type: 'doughnut', data: { datasets: [{ data: [v, m - v], backgroundColor: ['#10b981', 'rgba(255,255,255,0.05)'], borderWidth: 0 }] }, options: { cutout: '85%', plugins: { tooltip: { enabled: false } } } });
+        let vChart = new Chart(document.getElementById('volumeChart'), cfg(0, 1000000));
+        let sChart = new Chart(document.getElementById('speciesChart'), cfg(0, 10000));
+
+        function updateCharts(t) {
+            vChart.data.datasets[0].data = [t, 1000000 - t];
+            sChart.data.datasets[0].data = [t / 100, 10000]; 
+            vChart.update(); sChart.update();
         }
     </script>
 </body>
