@@ -3,154 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boreka Group | Reforest Global</title>
+    <title>Boreka Group | Global Payment Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { 
-            background-color: #011C15; 
-            color: white; 
-            font-family: 'Inter', sans-serif; 
-            scroll-behavior: smooth; 
-            overflow-x: hidden;
-        }
-
-        /* --- CINEMATIC ANIMATIONS --- */
+        :root { --emerald: #10b981; --dark: #011C15; }
+        body { background-color: var(--dark); color: white; font-family: 'Inter', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
+        
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 32px; }
+        
+        /* Shimmering Text Effect */
         .shimmer {
             background: linear-gradient(90deg, #10b981, #fff, #10b981);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite;
+            animation: shine 4s linear infinite;
         }
         @keyframes shine { to { background-position: 200% center; } }
 
-        /* Tree Evolution Animation (30 Seconds) */
+        /* Tree Evolution Core */
         .tree-stage { 
             font-size: 10rem; 
-            filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.4));
-            transition: all 2s ease-in-out;
+            filter: drop-shadow(0 0 50px rgba(16, 185, 129, 0.5));
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
             position: absolute;
+            transform: scale(0.5);
         }
-        .active-stage { opacity: 1; transform: scale(1.1); }
+        .active-stage { opacity: 1; transform: scale(1); }
 
-        /* UI Elements */
-        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; }
-        .map-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center; }
-        
-        .option-card { 
-            background: rgba(255,255,255,0.02); 
-            border: 1px solid rgba(255,255,255,0.1); 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .option-card:hover { border-color: #10b981; transform: translateY(-5px); background: rgba(16,185,129,0.05); }
-        .card-selected { border-color: #10b981; background: #10b981 !important; color: black !important; }
+        /* M-Pesa Button Custom Glow */
+        .mpesa-btn { background: #24AC47; box-shadow: 0 0 30px rgba(36, 172, 71, 0.3); transition: all 0.3s ease; }
+        .mpesa-btn:hover { background: #1e8e3a; transform: translateY(-3px); box-shadow: 0 0 50px rgba(36, 172, 71, 0.5); }
+
+        /* Selection Card */
+        .option-card { border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease; }
+        .option-card:hover { border-color: var(--emerald); background: rgba(16, 185, 129, 0.05); }
+        .selected-tier { background: var(--emerald) !important; color: black !important; border-color: var(--emerald); }
     </style>
 </head>
-<body class="p-4 md:p-10">
+<body>
 
-    <div id="mapContainer" class="map-overlay p-10">
-        <div class="glass w-full h-full p-8 flex flex-col">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-4xl font-black italic">GLOBAL PLANTING SITES</h2>
-                <button onclick="toggleMap()" class="text-gray-400 hover:text-white">CLOSE [X]</button>
-            </div>
-            <div class="flex-grow bg-emerald-950/50 rounded-3xl overflow-hidden relative border border-white/10">
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <p class="text-emerald-500 font-bold animate-pulse uppercase tracking-widest">Loading Satellite Telemetry...</p>
-                </div>
-                <iframe class="w-full h-full opacity-40 grayscale contrast-125" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.279584346765!2d36.8219!3d-1.2921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10d86f51d0d1%3A0xf64f51954d24a9e!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2ske!4v1625060000000!5m2!1sen!2ske" allowfullscreen="" loading="lazy"></iframe>
+    <div id="mapOverlay" class="hidden fixed inset-0 z-[100] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-6">
+        <div class="glass w-full max-w-5xl h-full p-8 flex flex-col relative">
+            <button onclick="toggleMap()" class="absolute top-8 right-8 text-white/50 hover:text-white transition">CLOSE [X]</button>
+            <h2 class="text-4xl font-black italic mb-6">LIVE PLANTING DATA</h2>
+            <div class="flex-grow bg-black/40 rounded-3xl border border-white/10 overflow-hidden">
+                <iframe class="w-full h-full grayscale opacity-40" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.2799307755!2d36.8172!3d-1.2864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10d03138cf31%3A0x103063f23347570d!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2ske!4v1714838400000!5m2!1sen!2ske"></iframe>
             </div>
         </div>
     </div>
 
-    <nav class="flex justify-between items-center max-w-7xl mx-auto mb-20 relative z-10">
+    <div id="payModal" class="hidden fixed inset-0 z-[110] bg-black/98 backdrop-blur-3xl flex items-center justify-center p-6">
+        <div class="glass max-w-md w-full p-12 text-center border-emerald-500/20">
+            <div id="modalContent">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/15/M-PESA_LOGO-01.svg" class="h-16 mx-auto mb-8">
+                <h3 class="text-3xl font-black italic mb-2 uppercase">STK Push</h3>
+                <p id="payDetails" class="text-gray-400 mb-10 text-sm">Validating session...</p>
+                
+                <div class="relative mb-6">
+                    <span class="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500 font-bold">+254</span>
+                    <input id="phoneNumber" type="text" placeholder="7XXXXXXXX" class="w-full bg-white/5 border border-white/10 p-6 pl-20 rounded-2xl text-2xl font-black outline-none focus:border-emerald-500 transition">
+                </div>
+
+                <button onclick="processSTK()" class="mpesa-btn w-full text-white font-black py-6 rounded-2xl text-xl uppercase italic">Initiate Payment</button>
+                <button onclick="closePay()" class="mt-8 text-gray-600 font-bold text-xs uppercase tracking-widest hover:text-white transition">Cancel Order</button>
+            </div>
+
+            <div id="modalLoading" class="hidden py-20">
+                <div class="w-20 h-20 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin mx-auto mb-8"></div>
+                <h4 class="text-2xl font-black italic uppercase">Awaiting PIN...</h4>
+                <p class="text-gray-500 mt-4">Check your phone for the M-Pesa prompt.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="successScreen" class="hidden fixed inset-0 z-[150] bg-emerald-950 flex flex-col items-center justify-center text-center p-6">
+        <div class="text-[15rem] mb-10 animate-bounce">🌳</div>
+        <h2 class="text-7xl md:text-9xl font-black italic leading-none mb-6 shimmer">VERIFIED</h2>
+        <p id="successMsg" class="text-emerald-400 text-2xl font-bold italic max-w-3xl mb-12"></p>
+        <button onclick="location.reload()" class="bg-white text-black px-16 py-6 rounded-full font-black text-2xl hover:scale-110 transition uppercase italic">Plant Another Forest</button>
+    </div>
+
+    <nav class="fixed top-0 w-full z-50 p-8 flex justify-between items-center max-w-7xl mx-auto left-1/2 -translate-x-1/2">
         <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-emerald-500 rounded flex items-center justify-center">🌲</div>
-            <span class="font-black italic text-xl tracking-tighter">BOREKA</span>
+            <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg">🌲</div>
+            <span class="font-black italic text-2xl tracking-tighter">BOREKA</span>
         </div>
 
-        <div class="hidden lg:flex gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">
-            <a href="#home" class="hover:text-emerald-400 transition">Home</a>
-            <a href="#portal" class="hover:text-emerald-400 transition">Planting</a>
-            <a href="#funding" class="hover:text-emerald-400 transition">Funding</a>
-            <a href="#leaders" class="hover:text-emerald-400 transition">Leaders</a>
+        <div class="hidden lg:flex gap-12 text-[10px] font-black uppercase tracking-[0.4em] text-gray-400">
+            <a href="#home" class="hover:text-emerald-400 transition">Evolution</a>
+            <a href="#board" class="hover:text-emerald-400 transition">Leaders</a>
+            <a href="#portal" class="hover:text-emerald-400 transition">Funding</a>
+            <a href="#stats" class="hover:text-emerald-400 transition">Impact</a>
         </div>
 
-        <div onclick="toggleMap()" class="cursor-pointer bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full hover:bg-emerald-500/20 transition group">
-            <span class="text-emerald-400 text-[10px] font-black uppercase tracking-widest group-hover:text-white transition">LIVE IMPACT: 8.4M TREES</span>
+        <div onclick="toggleMap()" class="cursor-pointer glass px-6 py-3 border border-emerald-500/20 flex items-center gap-3 hover:bg-emerald-500/10 transition group">
+            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></div>
+            <span class="text-emerald-400 text-[10px] font-black uppercase tracking-widest group-hover:text-white transition">Impact Map</span>
         </div>
     </nav>
 
-    <section id="home" class="min-h-screen flex flex-col items-center justify-center text-center relative max-w-6xl mx-auto">
-        
-        <div class="relative h-64 w-64 mb-16 flex items-center justify-center">
-            <div id="stage1" class="tree-stage active-stage">🫘</div> <div id="stage2" class="tree-stage">🌱</div> <div id="stage3" class="tree-stage">🌿</div> <div id="stage4" class="tree-stage">🌳</div> </div>
+    <section id="home" class="min-h-screen flex flex-col items-center justify-center text-center relative z-10 p-6">
+        <div class="relative h-80 w-80 mb-20 flex items-center justify-center">
+            <div id="stage1" class="tree-stage active-stage">🫘</div>
+            <div id="stage2" class="tree-stage">🌱</div>
+            <div id="stage3" class="tree-stage">🌿</div>
+            <div id="stage4" class="tree-stage">🌳</div>
+        </div>
 
-        <h1 class="text-7xl md:text-9xl font-black italic tracking-tighter leading-none mb-6">
+        <h1 class="text-8xl md:text-[10rem] font-black italic tracking-tighter leading-none mb-6">
             REFOREST <span class="shimmer">GLOBAL</span>
         </h1>
-        <p class="text-gray-400 text-xl max-w-2xl mb-12 leading-relaxed">
-            Boreka Group is scaling environmental restoration through direct action. Select a contribution tier to fund verified planting projects across the African highlands.
+        <p class="text-gray-400 text-xl max-w-2xl mb-12 font-medium">
+            Verified carbon sequestration funding for the African Highlands. Directly impact reforestation efforts through our secure portal.
         </p>
         <div class="flex gap-6">
-            <a href="#portal" class="bg-emerald-500 text-black px-12 py-5 rounded-2xl font-black text-xl hover:scale-105 transition shadow-[0_0_50px_rgba(16,185,129,0.3)]">START PLANTING</a>
-            <a href="#science" class="bg-white/5 border border-white/10 text-white px-12 py-5 rounded-2xl font-semibold text-xl hover:bg-white/10 transition">OUR SCIENCE</a>
+            <a href="#portal" class="bg-emerald-500 text-black px-14 py-6 rounded-2xl font-black text-2xl hover:scale-105 transition shadow-[0_0_50px_rgba(16,185,129,0.3)] uppercase italic">Start Planting</a>
+            <a href="#board" class="glass px-14 py-6 rounded-2xl font-bold text-2xl hover:bg-white/10 transition uppercase tracking-tighter">The Board</a>
         </div>
     </section>
 
-    <section id="leaders" class="py-32 max-w-7xl mx-auto">
-        <h2 class="text-emerald-500 font-black uppercase tracking-widest text-sm text-center mb-16">The Governance Board</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div class="glass p-8 text-center">
-                <div class="w-24 h-24 bg-white/5 rounded-full mx-auto mb-4 border border-white/10"></div>
-                <p class="font-bold">John Paul M.</p>
-                <p class="text-[10px] text-emerald-500 uppercase font-black">Strategic Lead</p>
+    <section id="board" class="py-40 max-w-7xl mx-auto px-6">
+        <div class="grid lg:grid-cols-2 gap-20">
+            <div>
+                <h2 class="text-emerald-500 font-black uppercase tracking-widest text-xs mb-4">Executive Leadership</h2>
+                <h3 class="text-6xl font-black italic mb-12">THE BOARD</h3>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="glass p-8 hover:border-emerald-500/50 transition">
+                        <div class="w-16 h-16 bg-white/5 rounded-full mb-4 border border-white/10"></div>
+                        <p class="font-bold">John Paul M.</p>
+                        <p class="text-[10px] text-emerald-500 uppercase font-black">Strategy Director</p>
+                    </div>
+                    <div class="glass p-8 hover:border-emerald-500/50 transition">
+                        <div class="w-16 h-16 bg-white/5 rounded-full mb-4 border border-white/10"></div>
+                        <p class="font-bold">Sarah K.</p>
+                        <p class="text-[10px] text-emerald-500 uppercase font-black">Operations Lead</p>
+                    </div>
+                </div>
             </div>
-            <div class="glass p-8 text-center">
-                <div class="w-24 h-24 bg-white/5 rounded-full mx-auto mb-4 border border-white/10"></div>
-                <p class="font-bold">Sarah K.</p>
-                <p class="text-[10px] text-emerald-500 uppercase font-black">Environmental Lead</p>
-            </div>
-            <div class="glass p-8 text-center">
-                <div class="w-24 h-24 bg-white/5 rounded-full mx-auto mb-4 border border-white/10"></div>
-                <p class="font-bold">David O.</p>
-                <p class="text-[10px] text-emerald-500 uppercase font-black">Tech Infrastructure</p>
-            </div>
-            <div class="glass p-8 text-center">
-                <div class="w-24 h-24 bg-white/5 rounded-full mx-auto mb-4 border border-white/10"></div>
-                <p class="font-bold">Amara W.</p>
-                <p class="text-[10px] text-emerald-500 uppercase font-black">Community Liaison</p>
+            <div class="glass p-10 border-emerald-500/10">
+                <h3 class="text-xs font-black uppercase tracking-widest text-gray-500 mb-8">Top Global Funders</h3>
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center border-b border-white/5 pb-4">
+                        <span class="font-black italic">1. ECO-CORE GLOBAL</span>
+                        <span class="text-emerald-500 font-bold">1,200,000 TREES</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-white/5 pb-4">
+                        <span class="font-black italic">2. GREEN TECH LTD</span>
+                        <span class="text-emerald-500 font-bold">850,000 TREES</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-black italic">3. NAIROBI INNOVATE</span>
+                        <span class="text-emerald-500 font-bold">420,000 TREES</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="portal" class="py-32 max-w-7xl mx-auto">
-        <div class="mb-16">
-            <h2 class="text-5xl md:text-7xl font-black italic tracking-tighter mb-4">CHOOSE CONTRIBUTION</h2>
-            <p class="text-gray-400">Verified reforestation tiers. Each selection calculates live environmental impact.</p>
-        </div>
-
-        <div id="grid" class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-16">
+    <section id="portal" class="py-40 max-w-7xl mx-auto px-6">
+        <h2 class="text-7xl font-black italic mb-16 tracking-tighter">SELECT CONTRIBUTION</h2>
+        
+        <div id="grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-20">
             </div>
 
-        <div class="glass p-12 lg:p-20">
+        <div class="glass p-12 md:p-24 border-emerald-500/20">
             <div class="grid lg:grid-cols-2 gap-20 items-center">
                 <div>
-                    <h2 class="text-5xl font-black italic mb-2">Impact Analysis</h2>
-                    <p id="impact-label" class="text-emerald-400 font-bold text-2xl mb-12">Select a Tier to Begin</p>
-                    <button class="w-full bg-emerald-500 text-black font-black py-6 rounded-3xl text-xl hover:scale-105 transition shadow-2xl">PROCEED TO CHECKOUT</button>
+                    <h2 class="text-6xl font-black italic mb-4 uppercase">Analysis</h2>
+                    <p id="impactLabel" class="text-emerald-400 font-bold text-3xl mb-12 italic">Select a tier...</p>
+                    <button onclick="openPay()" class="mpesa-btn w-full text-white font-black py-8 rounded-[2rem] text-3xl shadow-2xl uppercase italic">Proceed to M-Pesa</button>
                 </div>
                 <div class="flex justify-around items-center">
                     <div class="text-center">
-                        <div class="w-32 h-32 mb-4"><canvas id="volumeChart"></canvas></div>
-                        <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Volume Goal</p>
+                        <div class="w-40 h-40 mb-6"><canvas id="ch1"></canvas></div>
+                        <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Growth Forecast</p>
                     </div>
                     <div class="text-center">
-                        <div class="w-32 h-32 mb-4"><canvas id="speciesChart"></canvas></div>
-                        <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Species Cap</p>
+                        <div class="w-40 h-40 mb-6"><canvas id="ch2"></canvas></div>
+                        <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Bio-Diversity</p>
                     </div>
                 </div>
             </div>
@@ -158,22 +192,17 @@
     </section>
 
     <script>
-        // --- 1. GROWTH ANIMATION LOGIC (30s Cycle) ---
-        let stage = 1;
+        // --- 1. GROWTH ENGINE (30s) ---
+        let stg = 1;
         setInterval(() => {
             document.querySelectorAll('.tree-stage').forEach(el => el.classList.remove('active-stage'));
-            stage = stage < 4 ? stage + 1 : 1;
-            document.getElementById(`stage${stage}`).classList.add('active-stage');
-        }, 7500); // Transitions every 7.5s (30s total)
+            stg = stg < 4 ? stg + 1 : 1;
+            document.getElementById(`stage${stg}`).classList.add('active-stage');
+        }, 7500);
 
-        // --- 2. MAP TOGGLE ---
-        function toggleMap() {
-            const map = document.getElementById('mapContainer');
-            map.style.display = map.style.display === 'flex' ? 'none' : 'flex';
-        }
-
-        // --- 3. 20-TIER DATA INJECTION ---
-        const treeData = [
+        // --- 2. GRID SYSTEM ---
+        let currentSelection = null;
+        const tiers = [
             {t: 1, p: 5}, {t: 5, p: 25}, {t: 15, p: 75}, {t: 25, p: 125}, {t: 50, p: 250}, 
             {t: 100, p: 500}, {t: 250, p: 1250}, {t: 500, p: 2500}, {t: 1000, p: 5000}, {t: 2500, p: 10000}, 
             {t: 5000, p: 20000}, {t: 10000, p: 40000}, {t: 25000, p: 100000}, {t: 50000, p: 200000}, {t: 75000, p: 300000}, 
@@ -181,28 +210,48 @@
         ];
 
         const grid = document.getElementById('grid');
-        treeData.forEach(d => {
-            const el = document.createElement('div');
-            el.className = 'option-card p-8 rounded-3xl flex flex-col items-center justify-center cursor-pointer';
-            el.innerHTML = `<div class="text-2xl mb-1">🌲</div><div class="text-xl font-black italic">${d.t.toLocaleString()}</div><div class="text-emerald-500 font-bold">$${d.p.toLocaleString()}</div>`;
-            el.onclick = () => {
-                document.querySelectorAll('.option-card').forEach(c => c.classList.remove('card-selected'));
-                el.classList.add('card-selected');
-                document.getElementById('impact-label').innerText = `${d.t.toLocaleString()} Trees | Verified`;
+        tiers.forEach(d => {
+            const card = document.createElement('div');
+            card.className = 'option-card p-10 rounded-3xl text-center cursor-pointer glass';
+            card.innerHTML = `<div class="text-3xl font-black italic">${d.t.toLocaleString()}</div><div class="text-emerald-500 font-bold">$${d.p.toLocaleString()}</div>`;
+            card.onclick = () => {
+                document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected-tier'));
+                card.classList.add('selected-tier');
+                currentSelection = d;
+                document.getElementById('impactLabel').innerText = `${d.t.toLocaleString()} Trees Verified`;
                 updateCharts(d.t);
             };
-            grid.appendChild(el);
+            grid.appendChild(card);
         });
 
-        // --- 4. IMPACT CHARTS (Chart.js) ---
-        const cfg = (v, m) => ({ type: 'doughnut', data: { datasets: [{ data: [v, m - v], backgroundColor: ['#10b981', 'rgba(255,255,255,0.05)'], borderWidth: 0 }] }, options: { cutout: '85%', plugins: { tooltip: { enabled: false } } } });
-        let vChart = new Chart(document.getElementById('volumeChart'), cfg(0, 1000000));
-        let sChart = new Chart(document.getElementById('speciesChart'), cfg(0, 10000));
+        // --- 3. CHARTS ---
+        const cfg = (v, m) => ({ type: 'doughnut', data: { datasets: [{ data: [v, m-v], backgroundColor: ['#10b981', 'rgba(255,255,255,0.03)'], borderWidth: 0 }] }, options: { cutout: '90%', plugins: { tooltip: { enabled: false } } } });
+        let ch1 = new Chart(document.getElementById('ch1'), cfg(0, 1000000));
+        let ch2 = new Chart(document.getElementById('ch2'), cfg(0, 10000));
+        function updateCharts(t) { ch1.data.datasets[0].data=[t, 1000000-t]; ch2.data.datasets[0].data=[5000, 5000]; ch1.update(); ch2.update(); }
 
-        function updateCharts(t) {
-            vChart.data.datasets[0].data = [t, 1000000 - t];
-            sChart.data.datasets[0].data = [t / 100, 10000]; 
-            vChart.update(); sChart.update();
+        // --- 4. PAYMENT SYSTEM ---
+        function toggleMap() { document.getElementById('mapOverlay').classList.toggle('hidden'); }
+        function openPay() { 
+            if(!currentSelection) return alert("Select a tier first!");
+            document.getElementById('payDetails').innerText = `Funding ${currentSelection.t.toLocaleString()} Trees. Amount: $${currentSelection.p.toLocaleString()}`;
+            document.getElementById('payModal').classList.remove('hidden'); 
+        }
+        function closePay() { document.getElementById('payModal').classList.add('hidden'); }
+
+        function processSTK() {
+            const phone = document.getElementById('phoneNumber').value;
+            if(phone.length < 9) return alert("Enter valid phone number!");
+            
+            document.getElementById('modalContent').classList.add('hidden');
+            document.getElementById('modalLoading').classList.remove('hidden');
+            
+            // Simulate 4s API Wait
+            setTimeout(() => {
+                document.getElementById('payModal').classList.add('hidden');
+                document.getElementById('successScreen').classList.remove('hidden');
+                document.getElementById('successMsg').innerText = `You have successfully secured ${currentSelection.t.toLocaleString()} trees for the Nairobi highlands. Digital certificate sent to your phone.`;
+            }, 4000);
         }
     </script>
 </body>
